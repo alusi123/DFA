@@ -27,6 +27,3 @@ python shell_test.py -t=art_painting
 ```
 python shell_train.py -t=art_painting
 ```
-
-## Acknowledgements
-We thank the authors of [CIRL](https://github.com/BIT-DA/CIRL) for their open-source implementation and instructions on data preparation. 

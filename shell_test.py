@@ -23,7 +23,8 @@ target = args.target
 source.remove(target)
 
 config = "PACS/ResNet18"
-
+input_dir = "PACS/datalists"
+image_dir = "PACS/kfold/"
 root_path = "outputs/ckpt/res18_pacs"
 
 if not os.path.exists(root_path):
@@ -40,4 +41,7 @@ os.system(f'CUDA_VISIBLE_DEVICES={args.gpu} '
             f'--source {source[0]} {source[1]} {source[2]} '
             f'--target {target} '
             f'--config {config} '
-            f'--ckpt {ckpt_path}')
+            f'--ckpt {ckpt_path} '
+            f'--input_dir {input_dir} '
+            f'--image_dir {image_dir}'
+            )

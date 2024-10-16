@@ -189,21 +189,10 @@ class Trainer:
                                                         rampup_length=self.config["inv_warmup"]["warmup_epoch"],
                                                         rampup_type=self.config["inv_warmup"]["warmup_type"])
                 
-            loss_dict["domain_inv"] = loss_inv.item()
             loss_inv = loss_inv * invariant_weight
-            loss_dict["/i"] = loss_inv.item()
+            loss_dict["domain_inv"] = loss_inv.item()
             
             total_loss += loss_inv
-
-            # print domain classifier loss
-            if it % 30 == 0:
-                s_i1 = torch.softmax(scores_inv, dim=1)
-                s_s1 = torch.softmax(scores_spe, dim=1)
-                for i in range(1):
-                    self.logger.print_log(f" ")
-                    self.logger.print_log(f"num domain sample : 0:{num0}, 1:{num1}, 2:{num2}")
-                    self.logger.print_log(f"Domain Invariant : {s_i1[0][0]:.5f}, {s_i1[0][1]:.5f}, {s_i1[0][2]:.5f}")
-                    self.logger.print_log(f"Domain Specific : {s_s1[0][0]:.5f}, {s_s1[0][1]:.5f}, {s_s1[0][2]:.5f}")
 
             # Mask
             masks_superior = self.masker(features_invariant.detach())
@@ -286,7 +275,6 @@ class Trainer:
 
                 loss_cl = loss_cl1 + loss_cl2
                 
-                loss_dict["cl"] = loss_cl.item()
                 if self.config["cl_warmup"]["warmup"] is True:
                     const_weight_cl = get_current_consistency_weight(epoch=self.current_epoch,
                                                                         weight=self.config["cl_warmup"]["lam_const"],
@@ -295,7 +283,7 @@ class Trainer:
                 else:
                     const_weight_cl = self.config["cl_warmup"]["lam_const"]
                 loss_cl = loss_cl * const_weight_cl
-                loss_dict["/cl"] = loss_cl.item()
+                loss_dict["cl"] = loss_cl.item()
                 total_loss += loss_cl
 
 
